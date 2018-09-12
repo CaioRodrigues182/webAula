@@ -68,10 +68,10 @@
             <q-select v-model="course.company" :options="selectOptions" float-label="Empresas" />
           </div>
             <div class="padding-modal col-xs-4 col-md-4 col-xl-4">
-            <q-input v-model="course.name" float-label="Nome do curso" />
+            <q-input name="nome" v-model="course.name" float-label="Nome do curso" />
           </div>
             <div class="padding-modal col-xs-4 col-md-4 col-xl-4">
-            <q-input v-model="course.quantity" float-label="Quantidade de alunos" />
+            <q-input v-model="course.quantity" name="qtd" float-label="Quantidade de alunos" />
           </div>
             <div class="padding-modal col-xs-4 col-md-4 col-xl-4">
             <q-input type="textarea" rows="10" v-model="course.description" float-label="Descrição" />
@@ -161,6 +161,7 @@ export default {
       title: undefined,
       order: undefined,
       search: undefined,
+      oldEnterprise: undefined,
       modalExclude: false,
       course: {
         name: undefined,
@@ -219,6 +220,8 @@ export default {
       EventBus.$emit('getFields')
     },
     editFields (course) {
+      debugger
+      this.oldEnterprise = course.enterpriseId
       this.insert = true
       this.title = 'Editar '
       this.course = {
@@ -230,23 +233,28 @@ export default {
       }
     },
     updateCourse () {
-      const params = {
-        id: this.course.id,
-        EnterpriseId: this.course.company,
-        Enterprise: this.course.name,
-        Status: 'Active',
-        Name: this.course.name,
-        Quantity: this.course.quantity,
-        Description: this.course.description
+      if (!this.course.name && !this.course.quantity) {
+        Notify.create({color: 'yellow', icon: 'cancel', message: 'Preencha a empresa, o nome e a quantidade'})
+      } else {
+        const params = {
+          id: this.course.id,
+          EnterpriseId: this.course.company,
+          Enterprise: this.course.name,
+          Status: 'Active',
+          Name: this.course.name,
+          Quantity: this.course.quantity,
+          Description: this.course.description
+        }
+        return this.$http.put(`https://localhost:5001/api/course/${this.oldEnterprise}/${this.course.id}`, params, {
+          headers: {
+            'Content-Type': 'application/json'
+          }}).then((response) => {
+          this.insert = false
+          Notify.create({color: 'blue', icon: 'check', message: 'Operação realizada com sucesso!'})
+          EventBus.$emit('getList')
+        })
+          .catch(() => Notify.create({color: 'red', icon: 'cancel', message: 'Erro ao realizar operação!'}))
       }
-      return this.$http.put(`https://localhost:5001/api/course/${this.course.company}/${this.course.id}`, params, {
-        headers: {
-          'Content-Type': 'application/json'
-        }}).then((response) => {
-        this.insert = false
-        Notify.create({color: 'blue', icon: 'check', message: 'Operação realizada com sucesso!'})
-        EventBus.$emit('getList')
-      })
     },
     deleteCourse () {
       return this.$http.delete(`https://localhost:5001/api/course/${this.forRemove.id_company}/${this.forRemove.id_course}`)
@@ -255,6 +263,7 @@ export default {
           Notify.create({color: 'blue', icon: 'check', message: 'Operação realizada com sucesso!'})
           EventBus.$emit('getList')
         })
+        .catch(() => Notify.create({color: 'red', icon: 'cancel', message: 'Erro ao realizar operação!'}))
     },
     getCompany () {
       this.$http.get('https://localhost:5001/api/enterprise').then((response) => {
@@ -277,27 +286,32 @@ export default {
       }
     },
     addCourse () {
-      let id
-      for (const iterator of this.registrosFiltrados) {
-        id = iterator.id
+      if (!this.course.name && !this.course.quantity) {
+        Notify.create({color: 'yellow', icon: 'cancel', message: 'Preencha a empresa, o nome e a quantidade'})
+      } else {
+        let id
+        for (const iterator of this.registrosFiltrados) {
+          id = iterator.id
+        }
+        const params = {
+          Id: id + 1,
+          EnterpriseId: this.course.company,
+          Enterprise: this.course.name,
+          Status: 'Active',
+          Name: this.course.name,
+          Quantity: this.course.quantity,
+          Description: this.course.description
+        }
+        this.$http.post('https://localhost:5001/api/course', params, {
+          headers: {
+            'Content-Type': 'application/json'
+          }}).then((response) => {
+          this.insert = false
+          Notify.create({color: 'blue', icon: 'check', message: 'Operação realizada com sucesso!'})
+          EventBus.$emit('getList')
+        })
+          .catch(() => Notify.create({color: 'red', icon: 'cancel', message: 'Erro ao realizar operação!'}))
       }
-      const params = {
-        Id: id + 1,
-        EnterpriseId: this.course.company,
-        Enterprise: this.course.name,
-        Status: 'Active',
-        Name: this.course.name,
-        Quantity: this.course.quantity,
-        Description: this.course.description
-      }
-      this.$http.post('https://localhost:5001/api/course', params, {
-        headers: {
-          'Content-Type': 'application/json'
-        }}).then((response) => {
-        this.insert = false
-        Notify.create({color: 'blue', icon: 'check', message: 'Operação realizada com sucesso!'})
-        EventBus.$emit('getList')
-      })
     }
   },
   mounted () {

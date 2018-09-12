@@ -27,7 +27,7 @@
         <table class="courses">
           <thead>
             <tr>
-              <th v-for="campo in campos" :key="campo.nome">
+              <th class="col-grid" v-for="campo in campos" :key="campo.nome">
                   {{campo.nome}}
               </th>
             </tr>
@@ -48,8 +48,8 @@
               </td>
               <td >
                 <div class="row">
-                  <q-btn class="col-xl-5 btn-list-edit" small @click="editFields(item)" size="sm">Editar</q-btn>
-                  <q-btn class="col-xl-5 btn-list-danger" @click="openExclude(item)" size="sm">Excluir</q-btn>
+                  <q-btn class="btn-edit col-xl-5 btn-list btn-list-edit" small @click="editFields(item)" size="sm">Editar</q-btn>
+                  <q-btn class="btn-delete col-xl-5 btn-list btn-list btn-list-danger" @click="openExclude(item)" size="sm">Excluir</q-btn>
                 </div>
               </td>
               <hr>
@@ -144,9 +144,7 @@ export default {
     search: {
       handler (val) {
         let regexName = null
-        if (val) {
-          regexName = new RegExp(`^.*${val}.*$`, 'i')
-        }
+        regexName = new RegExp(`^.*${val}.*$`, 'i')
         this.registrosFiltrados = this.registrosFiltrados.filter((registro) => {
           if (regexName && (!regexName.test(registro.name) && !regexName.test(registro.enterprise))) {
             return false
@@ -220,7 +218,6 @@ export default {
       EventBus.$emit('getFields')
     },
     editFields (course) {
-      debugger
       this.oldEnterprise = course.enterpriseId
       this.insert = true
       this.title = 'Editar '
@@ -339,12 +336,16 @@ th, td {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
+    color: #747474;
+}
+.col-grid {
+  min-width: 150px;
 }
 .courses th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
-    background-color: #000000 white !important;
+    background-color: #ffff;
     color: #7B96C5;
 }
 
@@ -353,6 +354,9 @@ th, td {
     padding: 8px;
 }
 
+.courses tr {
+  height: 80px;
+}
 .courses tr:nth-child(even){background-color: #f2f2f2;}
 
 .courses tr:hover {background-color: #ddd;}
@@ -395,27 +399,31 @@ th, td {
 .exclude-modal span {
   font-size: 15px;
 }
-.btn-list-danger {
-  color: white;
-  background: #7B96C5
-}
-.btn-list-danger:hover {
-  border-radius: 5px;
-  background: #7B96C5
+.btn-list {
+  width: 65px;
+  height: 32px;
+  background-color: #F3F4F8;
+  color: #7B96C5;
 }
 .btn-list-edit:hover {
-  border-radius: 5px;
-  background: rgb(74, 58, 221) !important;
+  background-color: #7B96C5;
+  color: #fff;
+}
+.btn-list-danger {
+  border-radius: 0 15px 15px 0;
+}
+.btn-list-danger:hover {
+  background-color: #7B96C5;
+  color: #fff;
 }
 .btn-list-edit {
-  color: white;
-  background: rgb(84, 132, 230) !important;
+  border-radius: 15px 0 0 10px;
 }
 .btn-list-add {
   border-radius: 20px !important;
   color: white;
   border-radius: 0%;
-  background: rgb(36, 150, 138) !important;
+  background: #26D3BF;
 }
 .table-padding {
   padding: 10px;

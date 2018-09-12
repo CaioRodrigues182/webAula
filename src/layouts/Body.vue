@@ -11,7 +11,7 @@
           round
           @click="leftDrawerOpen = !leftDrawerOpen"
           aria-label="Menu">
-          <q-icon color="black" name="menu" />
+          <q-icon class="icon-menu" size="30px" name="menu" />
         </q-btn>
         <div class="offset-xs-6 offset-xl-10 row">
           <div>
@@ -31,7 +31,6 @@
       :content-class="$q.theme === 'mat' ? 'bg-grey-2' : null">
       <q-list
         no-border
-        link
         inset-delimiter>
         <q-list-header>
           <div>
@@ -39,20 +38,21 @@
           </div>
         </q-list-header>
         <q-item>
-          <q-item-side icon="school" />
-          <q-item-main label="Grupos colaborativos" />
+          <q-item-side icon="date_range" />
+          <q-item-main class="item" label="Grupos colaborativos" />
         </q-item>
         <q-item>
-          <q-item-side icon="code" />
-          <q-item-main label="Central de mensagens" />
+          <q-item-side icon="folder_open" />
+          <q-item-main class="item"  label="Central de Mensagens" />
         </q-item>
+        <q-collapsible class="item-collapsible" indent icon="show_chart" label="Cursos em Destaque" opened>
+          <div class="sub-item"> Relatórios </div>
+          <div class="sub-item"> Painel de Cursos </div>
+          <div class="sub-item"> Categorias </div>
+        </q-collapsible>
         <q-item>
-          <q-item-side icon="chat" />
-          <q-item-main label="Cursos em destaques" />
-        </q-item>
-        <q-item>
-          <q-item-side icon="record_voice_over" />
-          <q-item-main label="Configurações" />
+          <q-item-side icon="settings" />
+          <q-item-main class="item" label="Configurações" />
         </q-item>
       </q-list>
     </q-layout-drawer>
@@ -64,10 +64,10 @@
 </template>
 
 <script>
-import { openURL } from 'quasar'
+import { openURL, QCollapsible } from 'quasar'
 
 export default {
-  name: 'MyLayout',
+  name: 'Body',
   data () {
     return {
       leftDrawerOpen: this.$q.platform.is.desktop
@@ -75,6 +75,9 @@ export default {
   },
   methods: {
     openURL
+  },
+  components: {
+    QCollapsible
   }
 }
 </script>
@@ -92,8 +95,11 @@ export default {
   color: black;
   font-size: 15px;
   padding-bottom: 10px;
+  color: #7B96C5;
 }
-
+.icon-menu {
+  color: #7B96C5;
+}
 .q-list-header {
   margin-bottom: 20px;
 }
@@ -101,8 +107,19 @@ export default {
   color: rgba(223, 213, 213, 0.932);
   background: #2A3A5B !important;
 }
-.q-item:hover {
-  background-color: #E9E9E9;
+.item:hover {
+  color: #229488;
+}
+.item-collapsible:hover {
+  color: #229488;
+}
+.sub-item {
+  padding: 10px;
+  color: #8991a2fc;
+  border-left: solid 2px #229488;
+}
+.sub-item:hover {
+  color: #fff !important;
 }
 .margin-user {
   margin-top: 10px;

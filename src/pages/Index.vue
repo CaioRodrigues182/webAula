@@ -42,7 +42,6 @@ export default {
     },
     getFields () {
       this.$http.get('https://localhost:5001/api/course').then(response => {
-        debugger
         this.items = response.body.sort((a, b) => a.enterprise !== b.enterprise ? a.enterprise < b.enterprise ? -1 : 1 : 0)
       })
     }

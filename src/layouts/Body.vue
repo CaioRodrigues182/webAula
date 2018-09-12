@@ -13,7 +13,7 @@
           aria-label="Menu">
           <q-icon color="black" name="menu" />
         </q-btn>
-        <div class="offset-xs-6 offset-xl-9 row">
+        <div class="offset-xs-6 offset-xl-10 row">
           <div>
             <img src="../../img/avatar.png" height="40" width="40">
           </div>

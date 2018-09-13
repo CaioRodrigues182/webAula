@@ -417,7 +417,7 @@ th, td {
   color: #fff;
 }
 .btn-list-edit {
-  border-radius: 15px 0 0 10px;
+  border-radius: 15px 0 0 15px;
 }
 .btn-list-add {
   border-radius: 20px !important;

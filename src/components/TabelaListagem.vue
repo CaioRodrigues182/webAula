@@ -80,10 +80,10 @@
       <div class="padding-btn row">
         <div class="offset-xs-1 offset-xl-6">
           <div v-if="title == 'Cadastrar novo '">
-            <q-btn  class="btn-list-edit" @click="addCourse" label="Salvar" />
+            <q-btn  class="btn-edit" @click="addCourse" label="Salvar" />
           </div>
           <div v-else>
-            <q-btn class="btn-list-edit" @click="updateCourse" label="Editar" />
+            <q-btn class="btn-edit" @click="updateCourse" label="Editar" />
           </div>
         </div>
           <div>
